@@ -17,9 +17,6 @@ interface Lock {
   amount: number;
   duration: number;
   recipientId: string;
-  walletId: string;
-  recipientPropId: string;
-  lockType: string;
   endDate: string;
   name: string;
   gender: string;
@@ -44,7 +41,7 @@ const UserProfile = ({ name }: UserProfileProps) => {
 
 const BitBoxMain = ({ totalAmount, lockedAmount, onLockClick, activeLocks }: BitBoxMainProps) => {
   return (
-    <div className="min-h-screen bg-slate-900 p-8">
+    <div className="bg-slate-900 p-8 h-full">
       <UserProfile name="Yaniv Raveh" />
       
       {/* Logo and Title */}
@@ -125,10 +122,7 @@ const BitBoxMain = ({ totalAmount, lockedAmount, onLockClick, activeLocks }: Bit
 
 const BitBoxLockScreen = ({ onCreateLock }: BitBoxLockScreenProps) => {
   const [formData, setFormData] = useState({
-    walletId: '550e8400-e29b-41d4-a716-446655440000',
     recipientId: '',
-    recipientPropId: 'BitBox',
-    lockType: 'Ticket lock',
     amount: '',
     endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString(),
     name: 'Yaniv Raveh',
@@ -155,7 +149,7 @@ const BitBoxLockScreen = ({ onCreateLock }: BitBoxLockScreenProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 p-8">
+    <div className="px-8 pb-8">
       <UserProfile name="Yaniv Raveh" />
       
       {/* Logo and Title */}
@@ -169,23 +163,15 @@ const BitBoxLockScreen = ({ onCreateLock }: BitBoxLockScreenProps) => {
         <div className="w-16 h-16 bg-violet-500 rounded-full flex items-center justify-center">
           <Plane className="text-white w-8 h-8" />
         </div>
-        <div className="text-white text-sm mt-2">Ticket lock</div>
+        <div className="text-white text-sm mt-2 flex items-center gap-1">
+          Ticket lock
+          <ChevronDown className="w-4 h-4" />
+        </div>
       </div>
 
       {/* Form */}
       <div className="max-w-md mx-auto space-y-4">
         <div className="space-y-4">
-          <div>
-            <label className="block text-gray-400 text-sm mb-2">Wallet ID</label>
-            <input 
-              type="text" 
-              name="walletId"
-              className="w-full bg-slate-800 rounded-lg p-3 text-gray-400 border-none cursor-not-allowed"
-              value={formData.walletId}
-              disabled
-            />
-          </div>
-
           <div>
             <label className="block text-gray-400 text-sm mb-2">Recipient ID</label>
             <input 
@@ -196,22 +182,6 @@ const BitBoxLockScreen = ({ onCreateLock }: BitBoxLockScreenProps) => {
               onChange={handleInputChange}
               placeholder="Enter recipient ID"
             />
-          </div>
-
-          <div>
-            <label className="block text-gray-400 text-sm mb-2">Recipient Prop ID</label>
-            <button className="w-full bg-slate-800 rounded-lg p-3 text-white flex justify-between items-center">
-              BitBox
-              <ChevronDown className="w-5 h-5" />
-            </button>
-          </div>
-
-          <div>
-            <label className="block text-gray-400 text-sm mb-2">Lock type</label>
-            <button className="w-full bg-slate-800 rounded-lg p-3 text-white flex justify-between items-center">
-              Ticket lock
-              <ChevronDown className="w-5 h-5" />
-            </button>
           </div>
 
           <div>
@@ -248,40 +218,43 @@ const BitBoxLockScreen = ({ onCreateLock }: BitBoxLockScreenProps) => {
             />
           </div>
 
-          <div>
-            <label className="block text-gray-400 text-sm mb-2">Gender</label>
-            <select 
-              name="gender"
-              className="w-full bg-slate-800 rounded-lg p-3 text-white border-none appearance-none"
-              value={formData.gender}
-              onChange={handleInputChange}
-              style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'white\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")',
-                      backgroundPosition: 'right 12px center',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundSize: '20px' }}
-            >
-              <option value="" disabled>Select gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </div>
+          {/* Gender and Age on same line */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">Gender</label>
+              <select 
+                name="gender"
+                className="w-full bg-slate-800 rounded-lg p-3 text-white border-none appearance-none"
+                value={formData.gender}
+                onChange={handleInputChange}
+                style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'white\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")',
+                        backgroundPosition: 'right 12px center',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: '20px' }}
+              >
+                <option value="" disabled>Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
 
-          <div>
-            <label className="block text-gray-400 text-sm mb-2">Age</label>
-            <select 
-              name="age"
-              className="w-full bg-slate-800 rounded-lg p-3 text-white border-none appearance-none"
-              value={formData.age}
-              onChange={handleInputChange}
-              style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'white\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")',
-                      backgroundPosition: 'right 12px center',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundSize: '20px' }}
-            >
-              <option value="" disabled>Select age</option>
-              <option value="adult">Adult</option>
-              <option value="child">Child</option>
-            </select>
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">Age</label>
+              <select 
+                name="age"
+                className="w-full bg-slate-800 rounded-lg p-3 text-white border-none appearance-none"
+                value={formData.age}
+                onChange={handleInputChange}
+                style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'white\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")',
+                        backgroundPosition: 'right 12px center',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: '20px' }}
+              >
+                <option value="" disabled>Select age</option>
+                <option value="adult">Adult</option>
+                <option value="child">Child</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -309,15 +282,27 @@ const BitBoxApp = () => {
     setShowLockScreen(false);
   };
 
-  return showLockScreen ? (
-    <BitBoxLockScreen onCreateLock={handleCreateLock} />
-  ) : (
-    <BitBoxMain 
-      totalAmount={totalAmount}
-      lockedAmount={lockedAmount}
-      onLockClick={() => setShowLockScreen(true)}
-      activeLocks={activeLocks}
-    />
+  return (
+    <div className="fixed inset-0 bg-white flex items-center justify-center">
+      <div 
+        className="w-full max-w-md mx-auto h-[100vh] relative bg-slate-900 pt-8"
+        style={{ 
+          transform: 'scale(1.3)',
+          transformOrigin: 'top center'
+        }}
+      >
+        {showLockScreen ? (
+          <BitBoxLockScreen onCreateLock={handleCreateLock} />
+        ) : (
+          <BitBoxMain 
+            totalAmount={totalAmount}
+            lockedAmount={lockedAmount}
+            onLockClick={() => setShowLockScreen(true)}
+            activeLocks={activeLocks}
+          />
+        )}
+      </div>
+    </div>
   );
 };
 
