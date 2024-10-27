@@ -1,120 +1,293 @@
 import React, { useState } from 'react';
-import { AlertCircle, Mail, Lock, User, Github, Facebook, Twitter } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Plus, Minus, Lock, Send, Plane, ChevronDown } from 'lucide-react';
 
-const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [website, setWebsite] = useState('');
-  const [error, setError] = useState('');
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (!email || !password || !website) {
-      setError('Please fill in all fields');
-    } else {
-      setError('');
-      console.log('Login attempted:', { email, password, website });
-      // Here you would typically handle the login logic
-      alert(`Login attempted: ${email}, ${password}, ${website}`);
-    }
-  };
-
-  const handleSocialLogin = (platform) => {
-    console.log(`${platform} login attempted`);
-    // Here you would typically handle the social login logic
-    alert(`${platform} login attempted`);
-  };
-
+const UserProfile = ({ name }) => {
+  const initials = name.split(' ').map(n => n[0]).join('');
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Demo Component</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                icon={<Mail className="h-4 w-4 text-gray-500" />}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                icon={<Lock className="h-4 w-4 text-gray-500" />}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="website">Target Website</Label>
-              <Select onValueChange={setWebsite}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a website" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="website1">Website 1</SelectItem>
-                  <SelectItem value="website2">Website 2</SelectItem>
-                  <SelectItem value="website3">Website 3</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <Button type="submit" className="w-full">Log In</Button>
-          </form>
-
-          {error && (
-            <Alert variant="destructive" className="mt-4">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-
-          <div className="relative mt-6">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
-            </div>
-          </div>
-
-          <div className="flex space-x-4 mt-6">
-            <Button variant="outline" className="w-full" onClick={() => handleSocialLogin('Github')}>
-              <Github className="mr-2 h-4 w-4" /> Github
-            </Button>
-            <Button variant="outline" className="w-full" onClick={() => handleSocialLogin('Facebook')}>
-              <Facebook className="mr-2 h-4 w-4" /> Facebook
-            </Button>
-            <Button variant="outline" className="w-full" onClick={() => handleSocialLogin('Twitter')}>
-              <Twitter className="mr-2 h-4 w-4" /> Twitter
-            </Button>
-          </div>
-
-          <div className="text-center text-sm mt-6">
-            Don't have an account?{' '}
-            <Button variant="link" className="p-0">
-              Sign up
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+    <div className="absolute top-8 right-8 flex items-center gap-3">
+      <span className="text-white">{name}</span>
+      <div className="w-10 h-10 bg-violet-500 rounded-full flex items-center justify-center">
+        <span className="text-white font-semibold">{initials}</span>
+      </div>
     </div>
   );
 };
 
-export default LoginForm;
+const BitBoxMain = ({ totalAmount, lockedAmount, onLockClick, activeLocks }) => {
+  return (
+    <div className="min-h-screen bg-slate-900 p-8">
+      <UserProfile name="Yaniv Raveh" />
+      
+      {/* Logo and Title */}
+      <div className="flex items-center gap-2 mb-12">
+        <div className="w-8 h-8 bg-yellow-500"></div>
+        <span className="text-white text-2xl font-bold">Bit Box</span>
+      </div>
+
+      {/* Main Card */}
+      <div className="bg-white rounded-3xl p-6 max-w-md mx-auto">
+        <div className="text-center mb-8">
+          <div className="text-gray-500 text-sm mb-1">Total</div>
+          <div className="text-4xl font-bold">{totalAmount.toFixed(2)} ILS</div>
+          <div className="text-gray-500 text-sm mt-2">
+            Locked: <span className="text-gray-700">{lockedAmount.toFixed(2)} ILS</span>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-4 gap-4">
+          <button className="flex flex-col items-center">
+            <div className="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center mb-2">
+              <Plus className="text-white w-6 h-6" />
+            </div>
+            <span className="text-sm text-gray-700">Fund</span>
+          </button>
+
+          <button className="flex flex-col items-center">
+            <div className="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center mb-2">
+              <Minus className="text-white w-6 h-6" />
+            </div>
+            <span className="text-sm text-gray-700">Defund</span>
+          </button>
+
+          <button 
+            className="flex flex-col items-center"
+            onClick={onLockClick}
+          >
+            <div className="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center mb-2">
+              <Lock className="text-white w-6 h-6" />
+            </div>
+            <span className="text-sm text-gray-700">Lock</span>
+          </button>
+
+          <button className="flex flex-col items-center">
+            <div className="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center mb-2">
+              <Send className="text-white w-6 h-6" />
+            </div>
+            <span className="text-sm text-gray-700">Transfer</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Additional Sections */}
+      <div className="max-w-md mx-auto mt-6 space-y-4">
+        <div className="bg-slate-800 rounded-2xl p-4">
+          <h2 className="text-gray-400 text-sm mb-4">Active Locks</h2>
+          {activeLocks.map((lock, index) => (
+            <div key={index} className="bg-slate-700 rounded-lg p-4 mb-2">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-white">{lock.amount.toFixed(2)} ILS</span>
+                <span className="text-gray-400 text-sm">{lock.daysLeft} days left</span>
+              </div>
+              <div className="text-gray-400 text-sm">
+                Locked for: {lock.recipientId}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-slate-800 rounded-2xl p-4">
+          <h2 className="text-gray-400 text-sm">Recent Transactions</h2>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const BitBoxLockScreen = ({ onCreateLock }) => {
+  const [formData, setFormData] = useState({
+    walletId: '550e8400-e29b-41d4-a716-446655440000',
+    recipientId: '',
+    recipientPropId: 'BitBox',
+    lockType: 'Ticket lock',
+    amount: '',
+    endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+    name: 'Yaniv Raveh',
+    gender: '',
+    age: ''
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = () => {
+    onCreateLock({
+      ...formData,
+      amount: parseFloat(formData.amount),
+      daysLeft: 30
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-900 p-8">
+      <UserProfile name="Yaniv Raveh" />
+      
+      {/* Logo and Title */}
+      <div className="flex items-center gap-2 mb-12">
+        <div className="w-8 h-8 bg-yellow-500"></div>
+        <span className="text-white text-2xl font-bold">Bit Box</span>
+      </div>
+
+      {/* Lock Type Icon */}
+      <div className="flex flex-col items-center mb-8">
+        <div className="w-16 h-16 bg-violet-500 rounded-full flex items-center justify-center">
+          <Plane className="text-white w-8 h-8" />
+        </div>
+        <div className="text-white text-sm mt-2">Ticket lock</div>
+      </div>
+
+      {/* Form */}
+      <div className="max-w-md mx-auto space-y-4">
+        <div className="space-y-4">
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">Wallet ID</label>
+            <input 
+              type="text" 
+              name="walletId"
+              className="w-full bg-slate-800 rounded-lg p-3 text-gray-400 border-none cursor-not-allowed"
+              value={formData.walletId}
+              disabled
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">Recipient ID</label>
+            <input 
+              type="text" 
+              name="recipientId"
+              className="w-full bg-slate-800 rounded-lg p-3 text-white border-none" 
+              value={formData.recipientId}
+              onChange={handleInputChange}
+              placeholder="Enter recipient ID"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">Recipient Prop ID</label>
+            <button className="w-full bg-slate-800 rounded-lg p-3 text-white flex justify-between items-center">
+              BitBox
+              <ChevronDown className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">Lock type</label>
+            <button className="w-full bg-slate-800 rounded-lg p-3 text-white flex justify-between items-center">
+              Ticket lock
+              <ChevronDown className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">Amount</label>
+            <input 
+              type="number" 
+              name="amount"
+              className="w-full bg-slate-800 rounded-lg p-3 text-white border-none" 
+              value={formData.amount}
+              onChange={handleInputChange}
+              placeholder="Enter amount"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">End date</label>
+            <input 
+              type="text" 
+              name="endDate"
+              className="w-full bg-slate-800 rounded-lg p-3 text-white border-none" 
+              value={formData.endDate}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">Name</label>
+            <input 
+              type="text" 
+              name="name"
+              className="w-full bg-slate-800 rounded-lg p-3 text-white border-none"
+              value={formData.name}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">Gender</label>
+            <select 
+              name="gender"
+              className="w-full bg-slate-800 rounded-lg p-3 text-white border-none appearance-none"
+              value={formData.gender}
+              onChange={handleInputChange}
+              style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'white\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")',
+                      backgroundPosition: 'right 12px center',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundSize: '20px' }}
+            >
+              <option value="" disabled>Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">Age</label>
+            <select 
+              name="age"
+              className="w-full bg-slate-800 rounded-lg p-3 text-white border-none appearance-none"
+              value={formData.age}
+              onChange={handleInputChange}
+              style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'white\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")',
+                      backgroundPosition: 'right 12px center',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundSize: '20px' }}
+            >
+              <option value="" disabled>Select age</option>
+              <option value="adult">Adult</option>
+              <option value="child">Child</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Create Lock Button */}
+        <button 
+          className="w-full bg-yellow-500 text-slate-900 rounded-full py-4 font-semibold mt-6"
+          onClick={handleSubmit}
+        >
+          Create lock
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const BitBoxApp = () => {
+  const [showLockScreen, setShowLockScreen] = useState(false);
+  const [totalAmount] = useState(1000);
+  const [lockedAmount, setLockedAmount] = useState(0);
+  const [activeLocks, setActiveLocks] = useState([]);
+
+  const handleCreateLock = (lockData) => {
+    setLockedAmount(prev => prev + lockData.amount);
+    setActiveLocks(prev => [...prev, lockData]);
+    setShowLockScreen(false);
+  };
+
+  return showLockScreen ? (
+    <BitBoxLockScreen onCreateLock={handleCreateLock} />
+  ) : (
+    <BitBoxMain 
+      totalAmount={totalAmount}
+      lockedAmount={lockedAmount}
+      onLockClick={() => setShowLockScreen(true)}
+      activeLocks={activeLocks}
+    />
+  );
+};
+
+export default BitBoxApp;

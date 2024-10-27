@@ -1,10 +1,10 @@
 import './App.css'
-import Artifact from './artifact-component'
+import BitBoxApp from './artifact-component.tsx'
 
 function App() {
   return (
     <>
-      <Artifact />
+      <BitBoxApp />
     </>
   )
 }
