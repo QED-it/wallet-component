@@ -1,8 +1,37 @@
 import React, { useState } from 'react';
 import { Plus, Minus, Lock, Send, Plane, ChevronDown } from 'lucide-react';
 
-const UserProfile = ({ name }) => {
-  const initials = name.split(' ').map(n => n[0]).join('');
+// Define interfaces for your props
+interface UserProfileProps {
+  name: string;
+}
+
+interface BitBoxMainProps {
+  totalAmount: number;
+  lockedAmount: number;
+  onLockClick: () => void;
+  activeLocks: Lock[];
+}
+
+interface Lock {
+  amount: number;
+  duration: number;
+  recipientId: string;
+  walletId: string;
+  recipientPropId: string;
+  lockType: string;
+  endDate: string;
+  name: string;
+  gender: string;
+  age: string;
+}
+
+interface BitBoxLockScreenProps {
+  onCreateLock: (lockData: Lock) => void;
+}
+
+const UserProfile = ({ name }: UserProfileProps) => {
+  const initials = name.split(' ').map((n: string) => n[0]).join('');
   return (
     <div className="absolute top-8 right-8 flex items-center gap-3">
       <span className="text-white">{name}</span>
@@ -13,7 +42,7 @@ const UserProfile = ({ name }) => {
   );
 };
 
-const BitBoxMain = ({ totalAmount, lockedAmount, onLockClick, activeLocks }) => {
+const BitBoxMain = ({ totalAmount, lockedAmount, onLockClick, activeLocks }: BitBoxMainProps) => {
   return (
     <div className="min-h-screen bg-slate-900 p-8">
       <UserProfile name="Yaniv Raveh" />
@@ -73,11 +102,11 @@ const BitBoxMain = ({ totalAmount, lockedAmount, onLockClick, activeLocks }) => 
       <div className="max-w-md mx-auto mt-6 space-y-4">
         <div className="bg-slate-800 rounded-2xl p-4">
           <h2 className="text-gray-400 text-sm mb-4">Active Locks</h2>
-          {activeLocks.map((lock, index) => (
+          {activeLocks.map((lock: Lock, index: number) => (
             <div key={index} className="bg-slate-700 rounded-lg p-4 mb-2">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-white">{lock.amount.toFixed(2)} ILS</span>
-                <span className="text-gray-400 text-sm">{lock.daysLeft} days left</span>
+                <span className="text-gray-400 text-sm">{lock.duration} days left</span>
               </div>
               <div className="text-gray-400 text-sm">
                 Locked for: {lock.recipientId}
@@ -94,7 +123,7 @@ const BitBoxMain = ({ totalAmount, lockedAmount, onLockClick, activeLocks }) => 
   );
 };
 
-const BitBoxLockScreen = ({ onCreateLock }) => {
+const BitBoxLockScreen = ({ onCreateLock }: BitBoxLockScreenProps) => {
   const [formData, setFormData] = useState({
     walletId: '550e8400-e29b-41d4-a716-446655440000',
     recipientId: '',
@@ -107,7 +136,9 @@ const BitBoxLockScreen = ({ onCreateLock }) => {
     age: ''
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -119,7 +150,7 @@ const BitBoxLockScreen = ({ onCreateLock }) => {
     onCreateLock({
       ...formData,
       amount: parseFloat(formData.amount),
-      daysLeft: 30
+      duration: 30
     });
   };
 
@@ -270,9 +301,9 @@ const BitBoxApp = () => {
   const [showLockScreen, setShowLockScreen] = useState(false);
   const [totalAmount] = useState(1000);
   const [lockedAmount, setLockedAmount] = useState(0);
-  const [activeLocks, setActiveLocks] = useState([]);
+  const [activeLocks, setActiveLocks] = useState<Lock[]>([]);
 
-  const handleCreateLock = (lockData) => {
+  const handleCreateLock = (lockData: Lock) => {
     setLockedAmount(prev => prev + lockData.amount);
     setActiveLocks(prev => [...prev, lockData]);
     setShowLockScreen(false);
