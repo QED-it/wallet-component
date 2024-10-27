@@ -31,9 +31,9 @@ const UserProfile = ({ name }: UserProfileProps) => {
   const initials = name.split(' ').map((n: string) => n[0]).join('');
   return (
     <div className="absolute top-8 right-8 flex items-center gap-3">
-      <span className="text-white">{name}</span>
-      <div className="w-10 h-10 bg-violet-500 rounded-full flex items-center justify-center">
-        <span className="text-white font-semibold">{initials}</span>
+      <span className="text-white text-sm">{name}</span>
+      <div className="w-8 h-8 bg-violet-500 rounded-full flex items-center justify-center">
+        <span className="text-white text-sm font-medium">{initials}</span>
       </div>
     </div>
   );
@@ -41,61 +41,62 @@ const UserProfile = ({ name }: UserProfileProps) => {
 
 const BitBoxMain = ({ totalAmount, lockedAmount, onLockClick, activeLocks }: BitBoxMainProps) => {
   return (
-    <div className="bg-slate-900 p-8 h-full">
+    <div className="bg-slate-900 min-h-screen relative">
       <UserProfile name="Yaniv Raveh" />
       
-      {/* Logo and Title */}
-      <div className="flex items-center gap-2 mb-12">
-        <div className="w-8 h-8 bg-yellow-500"></div>
-        <span className="text-white text-2xl font-bold">Bit Box</span>
-      </div>
+      <div className="max-w-md mx-auto pt-8 px-8">
+        {/* Logo and Title */}
+        <div className="flex items-center gap-2 mb-12">
+          <div className="w-8 h-8 bg-yellow-500"></div>
+          <span className="text-white text-2xl font-bold">Bit Box</span>
+        </div>
 
-      {/* Main Card */}
-      <div className="bg-white rounded-3xl p-6 max-w-md mx-auto">
-        <div className="text-center mb-8">
-          <div className="text-gray-500 text-sm mb-1">Total</div>
-          <div className="text-4xl font-bold">{totalAmount.toFixed(2)} ILS</div>
-          <div className="text-gray-500 text-sm mt-2">
-            Locked: <span className="text-gray-700">{lockedAmount.toFixed(2)} ILS</span>
+        {/* Main Card */}
+        <div className="bg-white rounded-3xl p-6">
+          <div className="text-center mb-8">
+            <div className="text-gray-500 text-sm mb-1">Total</div>
+            <div className="text-4xl font-bold">{totalAmount.toFixed(2)} ILS</div>
+            <div className="text-gray-500 text-sm mt-2">
+              Locked: <span className="text-gray-700">{lockedAmount.toFixed(2)} ILS</span>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="grid grid-cols-4 gap-4">
+            <button className="flex flex-col items-center">
+              <div className="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center mb-2">
+                <Plus className="text-white w-6 h-6" />
+              </div>
+              <span className="text-sm text-gray-700">Fund</span>
+            </button>
+
+            <button className="flex flex-col items-center">
+              <div className="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center mb-2">
+                <Minus className="text-white w-6 h-6" />
+              </div>
+              <span className="text-sm text-gray-700">Defund</span>
+            </button>
+
+            <button 
+              className="flex flex-col items-center"
+              onClick={onLockClick}
+            >
+              <div className="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center mb-2">
+                <Lock className="text-white w-6 h-6" />
+              </div>
+              <span className="text-sm text-gray-700">Lock</span>
+            </button>
+
+            <button className="flex flex-col items-center">
+              <div className="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center mb-2">
+                <Send className="text-white w-6 h-6" />
+              </div>
+              <span className="text-sm text-gray-700">Transfer</span>
+            </button>
           </div>
         </div>
-
-        {/* Action Buttons */}
-        <div className="grid grid-cols-4 gap-4">
-          <button className="flex flex-col items-center">
-            <div className="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center mb-2">
-              <Plus className="text-white w-6 h-6" />
-            </div>
-            <span className="text-sm text-gray-700">Fund</span>
-          </button>
-
-          <button className="flex flex-col items-center">
-            <div className="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center mb-2">
-              <Minus className="text-white w-6 h-6" />
-            </div>
-            <span className="text-sm text-gray-700">Defund</span>
-          </button>
-
-          <button 
-            className="flex flex-col items-center"
-            onClick={onLockClick}
-          >
-            <div className="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center mb-2">
-              <Lock className="text-white w-6 h-6" />
-            </div>
-            <span className="text-sm text-gray-700">Lock</span>
-          </button>
-
-          <button className="flex flex-col items-center">
-            <div className="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center mb-2">
-              <Send className="text-white w-6 h-6" />
-            </div>
-            <span className="text-sm text-gray-700">Transfer</span>
-          </button>
-        </div>
       </div>
-
-      {/* Additional Sections */}
+      
       <div className="max-w-md mx-auto mt-6 space-y-4">
         <div className="bg-slate-800 rounded-2xl p-4">
           <h2 className="text-gray-400 text-sm mb-4">Active Locks</h2>
@@ -111,10 +112,9 @@ const BitBoxMain = ({ totalAmount, lockedAmount, onLockClick, activeLocks }: Bit
             </div>
           ))}
         </div>
-
-        <div className="bg-slate-800 rounded-2xl p-4">
-          <h2 className="text-gray-400 text-sm">Recent Transactions</h2>
-        </div>
+      </div>
+      <div className="bg-slate-800 rounded-2xl p-4 max-w-md mx-auto mt-4">
+        <h2 className="text-gray-400 text-sm">Recent Transactions</h2>
       </div>
     </div>
   );
